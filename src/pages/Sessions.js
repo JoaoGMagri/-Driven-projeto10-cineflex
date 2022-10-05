@@ -62,6 +62,7 @@ export default function Sessions() {
 const ContainerSessions = styled.div`
 
     margin-top: 67px;
+    margin-bottom: 117px;
     display:flex;
     flex-direction: column;
     justify-content: center;
