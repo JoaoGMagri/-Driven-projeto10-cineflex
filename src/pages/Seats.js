@@ -1,12 +1,12 @@
 import styled from "styled-components";
 import axios from "axios";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+
+import Footer from "../components/Footer";
 
 export default function Seats() {
 
-    const assentos = Array(50).fill('x');
-    
     let idMovie = useParams();
     idMovie = idMovie.idSessao;
     const URL = `https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${idMovie}/seats`
@@ -34,51 +34,55 @@ export default function Seats() {
 
     return (
 
-        <ContainerSeats>
+        <>
+            <ContainerSeats>
 
-            <h2>Selecione o(s) assento(s)</h2>
+                <h2>Selecione o(s) assento(s)</h2>
 
-            <ChooseSeats>
-                {assentos.map((num, i) =>
-                    <Chair
-                        color="green"
-                        type="button"
-                        key={i}>
-                        {num}
-                    </Chair>
-                )}
-            </ChooseSeats>
+                <ChooseSeats>
+                    {movie.seats.map((num, i) =>
+                        <Chair
+                            estado={num.isAvailable}
+                            type="button"
+                            key={i}>
+                            {num.name}
+                        </Chair>
+                    )}
+                </ChooseSeats>
 
-            <Subtitle>
+                <Subtitle>
 
-                <div>
-                    <Chair color={"yellow"} ></Chair>
-                    <span>Selecionado</span>
-                </div>
+                    <div>
+                        <Chair estado={true} ></Chair>
+                        <span>Selecionado</span>
+                    </div>
 
-                <div>
-                    <Chair color={"green"} ></Chair>
-                    <span>Disponível</span>
-                </div>
+                    <div>
+                        <Chair estado={true} ></Chair>
+                        <span>Disponível</span>
+                    </div>
 
-                <div>
-                    <Chair color={"grey"} ></Chair>
-                    <span>Indisponível</span>
-                </div>
+                    <div>
+                        <Chair estado={false} ></Chair>
+                        <span>Indisponível</span>
+                    </div>
 
-            </Subtitle>
+                </Subtitle>
 
-            <UserInformation>
-                <span>Nome do comprador:</span>
-                <input type="text" placeholder="Digite seu nome..."></input>
+                <UserInformation>
+                    <span>Nome do comprador:</span>
+                    <input type="text" placeholder="Digite seu nome..."></input>
 
-                <span>CPF do comprador:</span>
-                <input type="text" placeholder="Digite seu CPF..."></input>
-            </UserInformation>
+                    <span>CPF do comprador:</span>
+                    <input type="text" placeholder="Digite seu CPF..."></input>
+                </UserInformation>
 
-            <Confirmation type="button">Reservar assento(s)</Confirmation>
+                <Confirmation type="button">Reservar assento(s)</Confirmation>
 
-        </ContainerSeats>
+            </ContainerSeats>
+
+            <Footer img={movie.movie.posterURL} name={movie.movie.title} day={movie.day.weekday} hour={movie.name} />
+        </>
 
     )
 
@@ -107,8 +111,8 @@ const Chair = styled.button`
 
     width: 26px;
     height: 26px; 
-    background-color: ${props => props.color};
-    border: 1px solid ${props => props.color};
+    background-color: ${props => props.estado ? "green" : "grey"};
+    border: 1px solid ;
     border-radius: 12px;
     cursor: pointer;
 

@@ -3,6 +3,8 @@ import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 
+import Footer from "../components/Footer";
+
 export default function Sessions() {
 
     let idMovie = useParams();
@@ -31,25 +33,28 @@ export default function Sessions() {
     }
 
     return (
-        <ContainerSessions>
+        <>
+            <ContainerSessions>
 
-            <h2>Selecione o horário</h2>
+                <h2>Selecione o horário</h2>
 
-            {movie.days.map((item, i) => 
-                <Given key={i}>
-                    <Days>{item.weekday} - {item.date}</Days>
-                    <Schedules>
-                        <Link to={"/assentos/"+item.showtimes[0].id}>
-                            <button type="button">{item.showtimes[0].name}</button>
-                        </Link>
-                        <Link to={"/assentos/"+item.showtimes[1].id}>
-                            <button type="button">{item.showtimes[1].name}</button>
-                        </Link>
-                    </Schedules>
-                </Given>
-            )}
-            
-        </ContainerSessions>
+                {movie.days.map((item, i) =>
+                    <Given key={i}>
+                        <Days>{item.weekday} - {item.date}</Days>
+                        <Schedules>
+                            <Link to={"/assentos/" + item.showtimes[0].id}>
+                                <button type="button">{item.showtimes[0].name}</button>
+                            </Link>
+                            <Link to={"/assentos/" + item.showtimes[1].id}>
+                                <button type="button">{item.showtimes[1].name}</button>
+                            </Link>
+                        </Schedules>
+                    </Given>
+                )}
+
+            </ContainerSessions>
+            <Footer img={movie.posterURL} name={movie.title} day={""} hour={""} />
+        </>
     )
 
 }
