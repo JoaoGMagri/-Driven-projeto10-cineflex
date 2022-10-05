@@ -50,6 +50,22 @@ const GlobalStyle = createGlobalStyle`
     border-spacing: 0;
   }
 
+  //Formatação geral
+  body{
+    background-color: rgb(86,86,96);
+    font-family: 'Roboto';
+    position: relative;
+  }
+
+  h2{
+    
+    font-style: normal;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 28px;
+    color:white;
+    margin: 25px 0px;
+  }
 `
 
 export default GlobalStyle
