@@ -12,7 +12,7 @@ import Success from "./pages/Success";
 
 export default function App() {
 
-  const [obj, setObj] = useState([]);
+  const [obj, setObj] = useState(false);
 
   return (
     <BrowserRouter>
