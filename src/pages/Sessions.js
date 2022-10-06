@@ -11,7 +11,7 @@ export default function Sessions() {
     idMovie = idMovie.idFilme;
     const URL = `https://mock-api.driven.com.br/api/v5/cineflex/movies/${idMovie}/showtimes`
     const [movie, setMovie] = useState([]);
-
+    
     useEffect(() => {
 
         const promise = axios.get(URL);

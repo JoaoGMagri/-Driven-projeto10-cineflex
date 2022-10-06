@@ -1,16 +1,26 @@
 import styled from "styled-components";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import Footer from "../components/Footer";
+import ChooseSeats from "../components/ChooseSeats";
 
-export default function Seats() {
+export default function Seats({setObj}) {
 
     let idMovie = useParams();
     idMovie = idMovie.idSessao;
     const URL = `https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${idMovie}/seats`
+    const navigate = useNavigate();
+
     const [movie, setMovie] = useState([]);
+    const [seatMovie, setSeatMovie] = useState([]);
+    const [objIdMovie, setObjIdMovie] = useState([]);
+    const [objNameMovie, setObjNameMovie] = useState("");
+    const [objCPFMovie, setObjCPFMovie] = useState("");
+
+    console.log(objIdMovie);
+    console.log(seatMovie);
 
     useEffect(() => {
 
@@ -23,6 +33,36 @@ export default function Seats() {
         });
 
     }, [URL]);
+
+    function finish() {
+
+        const obj1 = {
+            ids: [...objIdMovie],
+            name: objNameMovie,
+            cpf: objCPFMovie
+        }
+
+        const obj2 = {
+            title: movie.movie.title,
+            day: movie.day.weekday,
+            hour: movie.name,
+            seat: seatMovie,
+            name: objNameMovie,
+            cpf: objCPFMovie
+        }
+
+        setObj(obj2);
+        const promise = axios.post("https://mock-api.driven.com.br/api/v5/cineflex/seats/book-many", obj1);
+        promise.then(() => alert("Deu bom"));
+        promise.catch(() => alert("Deu ruim"));
+
+    }
+
+    function submit(event) {
+        finish();
+        event.preventDefault();
+        navigate("/sucesso");
+    }
 
     if (movie.length === 0) {
         return (
@@ -39,45 +79,63 @@ export default function Seats() {
 
                 <h2>Selecione o(s) assento(s)</h2>
 
-                <ChooseSeats>
-                    {movie.seats.map((num, i) =>
-                        <Chair
-                            estado={num.isAvailable}
-                            type="button"
-                            key={i}>
-                            {num.name}
-                        </Chair>
+                <ContainerChooseSeats>
+
+                    {movie.seats.map(item =>
+                        <ChooseSeats
+                            movie={item}
+                            id={setObjIdMovie}
+                            arrayId={objIdMovie}
+                            seat={setSeatMovie}
+                            arraySeat={seatMovie}
+                            key={item.id}
+                        />
                     )}
-                </ChooseSeats>
+
+                </ContainerChooseSeats>
 
                 <Subtitle>
 
                     <div>
-                        <Chair estado={true} ></Chair>
+                        <Chair estado="yellow" ></Chair>
                         <span>Selecionado</span>
                     </div>
 
                     <div>
-                        <Chair estado={true} ></Chair>
+                        <Chair estado="green" ></Chair>
                         <span>Disponível</span>
                     </div>
 
                     <div>
-                        <Chair estado={false} ></Chair>
+                        <Chair estado="grey" ></Chair>
                         <span>Indisponível</span>
                     </div>
 
                 </Subtitle>
 
-                <UserInformation>
+                <UserInformation id="form" onSubmit={submit}>
+
                     <span>Nome do comprador:</span>
-                    <input type="text" placeholder="Digite seu nome..."></input>
+                    <input
+                        required
+                        type="text"
+                        placeholder="Digite seu nome..."
+                        onChange={(item) => setObjNameMovie(item.target.value)}
+                    />
 
                     <span>CPF do comprador:</span>
-                    <input type="text" placeholder="Digite seu CPF..."></input>
+                    <input
+                        required
+                        type="text"
+                        placeholder="Digite seu CPF..."
+                        pattern="\d{3}.?\d{3}.?\d{3}-?\d{2}" 
+                        onChange={(item) => setObjCPFMovie(item.target.value)}
+                    />
+
                 </UserInformation>
 
-                <Confirmation type="button">Reservar assento(s)</Confirmation>
+                <Confirmation form="form" type="submit">Reservar assento(s)</Confirmation>
+
 
             </ContainerSeats>
 
@@ -98,7 +156,7 @@ const ContainerSeats = styled.div`
     align-items: center;
 
 `
-const ChooseSeats = styled.div`
+const ContainerChooseSeats = styled.div`
 
     width: 90%;
     gap: 7px;
@@ -112,7 +170,7 @@ const Chair = styled.button`
 
     width: 26px;
     height: 26px; 
-    background-color: ${props => props.estado ? "green" : "grey"};
+    background-color: ${props => props.estado};
     border: 1px solid ;
     border-radius: 12px;
     cursor: pointer;
@@ -141,7 +199,7 @@ const Subtitle = styled.div`
     }
 
 `
-const UserInformation = styled.div`
+const UserInformation = styled.form`
 
     width: 90%;
     display: flex;
@@ -168,7 +226,6 @@ const UserInformation = styled.div`
         display: flex;
         align-items: center;
     }
-
 `
 const Confirmation = styled.button`
 
