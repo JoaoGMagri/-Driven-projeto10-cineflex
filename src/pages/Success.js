@@ -3,19 +3,22 @@ import { Link } from "react-router-dom";
 
 export default function Success({ obj }) {
 
-    let cpf = obj.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, 
-    function( regex, argumento1, argumento2, argumento3, argumento4 ) {
-           return argumento1 + '.' + argumento2 + '.' + argumento3 + '-' + argumento4;
-   })
+
     if (!obj) {
         return (
             <ContainerSuccess>
-                    <Link to={"/"}>
-                        <button>Página principal</button>
-                    </Link>
+                <Link to={"/"}>
+                    <button>Página principal</button>
+                </Link>
             </ContainerSuccess>
         )
     }
+
+    let cpf = obj.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,
+        function (regex, argumento1, argumento2, argumento3, argumento4) {
+            return argumento1 + '.' + argumento2 + '.' + argumento3 + '-' + argumento4;
+        }
+    )
 
     return (
         <ContainerSuccess>
