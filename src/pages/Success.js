@@ -3,6 +3,10 @@ import { Link } from "react-router-dom";
 
 export default function Success({ obj }) {
 
+    let cpf = obj.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, 
+    function( regex, argumento1, argumento2, argumento3, argumento4 ) {
+           return argumento1 + '.' + argumento2 + '.' + argumento3 + '-' + argumento4;
+   })
     if (!obj) {
         return (
             <ContainerSuccess>
@@ -29,7 +33,7 @@ export default function Success({ obj }) {
 
                 <Title>Comprador</Title>
                 <Info>Nome: {obj.name}</Info>
-                <Info>CPF: {obj.cpf}</Info>
+                <Info>CPF: {cpf}</Info>
 
             </Summary>
 

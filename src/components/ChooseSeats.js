@@ -47,7 +47,8 @@ export default function ChooseSeats({ movie, id, arrayId, seat, arraySeat }) {
                         onClick={occupied}
                         estado="grey"
                         type="button"
-                        key={movie.id}>
+                        key={movie.id}
+                    >
                         {movie.name}
                     </Chair>
                 )
